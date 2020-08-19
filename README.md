@@ -1,16 +1,17 @@
 # flutter_login_demo
 
-A new Flutter project.
+Quick Flutter app to showcase Login Authentication using Firebase.
 
-## Getting Started
+## Details
 
-This project is a starting point for a Flutter application.
+Initial commit is code from article: "Flutter Authentication" by Rajat Palankar.  Excellent explanation, Rajat:
+https://protocoderspoint.com/flutter-login-and-registration-page-using-firebase-authentication/
 
-A few resources to get you started if this is your first Flutter project:
+Second commit contains changes noted by FlutterFire package author: 
+https://firebase.flutter.dev/docs/overview/#initializing-flutterfire
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+These changes are needed in order to make the Android demo app work (as of 2020-08-19).  Short explanation: await Firebase.initializeApp() needs to be called before invoking FirebaseAuth.instance.  Otherwise you'll get a missing [DEFAULT APP] firebase error.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Not surprised error occurs since underlying technology often changes once the tutorial has been written.
+
+
