@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'login.dart';
 
@@ -26,12 +27,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _auth = FirebaseAuth.instance;
+  FirebaseAuth _auth;
+  bool _initialized = false;
+  bool _error = false;
   bool showProgress = false;
-
   String email, password;
+
+  @override
+  void initState() {
+    initializeFlutterFire();
+    super.initState();
+  }
+
+  void initializeFlutterFire() async {
+    try {
+      await Firebase.initializeApp();
+      setState(() {
+        _auth = FirebaseAuth.instance;
+        _initialized = true;
+      });
+    } catch (e) {
+      _error = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_error) {
+      return Container(
+        alignment: Alignment.center,
+        child: Text('Couldn`t init Firebase'),
+      );
+    }
+
+    if (!_initialized) {
+      return Container(
+        alignment: Alignment.center,
+        child: Text('Loading...'),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Firebase Authentication"),
@@ -97,12 +132,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           MaterialPageRoute(
                               builder: (context) => MyLoginPage()),
                         );
-
-                        setState(() {
-                          showProgress = false;
-                        });
                       }
-                    } catch (e) {}
+                    } catch (e) {
+                      print('Create Error: e=$e');
+                    }
+
+                    setState(() {
+                      showProgress = false;
+                    });
                   },
                   minWidth: 200.0,
                   height: 45.0,
